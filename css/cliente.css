@@ -9,7 +9,6 @@ html body {
 }
 body {
 	font-family: sans-serif;
-	background-image: url(images/wallpaper.png);
 }
 
 .container {
@@ -90,6 +89,11 @@ ul {
 	display: inline-table;
 }
 
+.main-footer {
+	position: relative;
+	bottom: -40px;
+}
+
 .main-footer ul {
 	    margin-right: 55px;
 	    display: inline-flex;
@@ -97,4 +101,34 @@ ul {
 
 .main-footer li {
 	margin-left: 20px;
+}
+
+.rounded input {
+	border-radius: 6px;
+}
+.rounded[type=text] {
+	width: 200px;
+}
+
+
+.rounded input {
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: white;
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+}
+
+input[type=submit] {
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: white;
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 20px;
 }
