@@ -18,9 +18,18 @@ body {
 	padding-left: 10px;
 	padding-right: 10px;
 }
+
+.container img:hover {
+	opacity: 0.5;
+}
+
 .opciones {
 	margin: 0 auto;
 	display: inline;
+}
+
+a:hover {
+	opacity: 0.5;
 }
 
 a {
@@ -29,8 +38,12 @@ a {
 
 .top-bar p {
     display: inline-block;
-    margin-right: 150px;
-    margin-left: 110px;
+    margin-right: 40px;
+    margin-left: 40px;
+}
+
+.top-bar ul {
+	margin-right: 35px;
 }
 
 .top-bar a {
@@ -47,6 +60,7 @@ a {
 	text-align: center;
 	margin-top: 9px;
 }
+
 .logo {
 	width: 180px;
 	border-radius: 90px;
@@ -101,6 +115,8 @@ ul {
 
 .main-footer li {
 	margin-left: 20px;
+	position: relative;
+	top: 7px;
 }
 
 .rounded input {
@@ -136,7 +152,76 @@ input[type=submit] {
 
 .top-bar input[name=busqueda] {
     font-size: 18px;
-    padding: 7px 20px 7px 20px;
+    padding: 7px 20px 2px 20px;
     border: none;
     background-color: transparent;
 }
+
+.top-bar input[name=busqueda]:hover {
+    border-bottom: 2px solid;
+}
+
+.main-footer {
+	background: #F0F0F0;
+	width: 100%;
+}
+
+.main-footer img {
+	width: 35px;
+	height: 35px;
+	position: relative;
+	bottom: 2px;
+	margin-right: 5px;
+	margin-left: 7px;
+}
+
+@media screen and (min-width: 830px){
+	.main-header img {
+		width: 50%;
+	}
+}
+
+@media screen and (max-width: 830px){
+	.main-header img {
+		width: 80%;
+	}
+}
+
+
+
+
+@media	screen and (max-width: 620px){
+	.top-bar p {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+}	
+
+@media	screen and (max-width: 930px){
+	.top-bar p {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+}
+
+@media	screen and (min-width: 930px){
+	.main-header img {
+
+}
+}
+
+.servicio {
+	float: left;
+	margin-left: 18px; 
+	margin-top: 16px;	
+}
+
+@media	screen and (max-width: 645px){
+	.opciones {
+		font-size: 10px;
+	}
+	.servicio {
+		margin-top: 10px; 
+	}
+}
+
