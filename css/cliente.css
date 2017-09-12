@@ -132,3 +132,11 @@ input[type=submit] {
     background-repeat: no-repeat;
     padding: 12px 20px 12px 20px;
 }
+
+
+.top-bar input[name=busqueda] {
+    font-size: 18px;
+    padding: 7px 20px 7px 20px;
+    border: none;
+    background-color: transparent;
+}
