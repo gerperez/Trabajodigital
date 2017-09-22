@@ -11,8 +11,8 @@
 				<div style="float: right">
 				<nav class="main.nav">
 						<ul>
-							<li><a href="iniciosesion.html">Iniciar sesión</a></li>
-							<li><a href="registro.html">Regístrese</a></li>
+							<li><a href="iniciosesion.php">Iniciar sesión</a></li>
+							<li><a href="registro.php">Regístrese</a></li>
 							<li><a href="#">Contacto</a></li>
 						</ul>
 				</nav></div>

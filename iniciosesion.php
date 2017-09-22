@@ -1,3 +1,35 @@
+<?php
+
+	require_once("funciones.php");
+	if (yaEstaLogueado()) {
+		header("Location: main.php");
+	} 
+
+	//validar
+
+	//si ta todo ok set session
+
+	//redirigir a home
+
+	if ($_POST) {
+
+  	$arrayErrores = validarInicio($_POST);
+
+  	var_dump($arrayErrores);exit;
+
+  	//Si es valido, loguear
+  	if (count($arrayErrores) == 0) {
+    loguear($_POST["email"]);
+    if (isset($_POST["recordame"])) {
+      recordarUsuario($_POST["email"]);
+    }
+    header("Location:main.php");
+  	} else var_dump($arrayErrores);
+  	var_dump($usuario);
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -13,9 +45,9 @@
 				<div style="float: right">
 				<nav class="main.nav">
 						<ul>
-							<li><a href="main.html">Home</a></li>
-							<li><a href="iniciosesion.html">Iniciar sesión</a></li>
-							<li><a href="registro.html">Regístrese</a></li>
+							<li><a href="main.php">Home</a></li>
+							<li><a href="iniciosesion.php">Iniciar sesión</a></li>
+							<li><a href="registro.php">Regístrese</a></li>
 							<li><a href="#">Contacto</a></li>
 						</ul>
 				</nav></div>
@@ -29,12 +61,12 @@
 			</div>		
 <br>
 <center>
-		<form action="main.html" class="registro">
+		<form action="iniciosesion.php" class="registro" method="POST">
 		<div class="rounded">	
   			Mail:<br>
-  			<input type="text" name="mail" value=""><br><br>
+  			<input type="text" name="email" value=""><br><br>
   			Contraseña:<br>
-  			<input type="password" name="constraseña" value=""><br>
+  			<input type="password" name="contrasena" value=""><br>
   			<h6><a>Olvido su contraseña?</a></h6>
   		</div>	
   			<input type="submit" value="Iniciar sesión">
