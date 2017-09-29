@@ -4,8 +4,10 @@
   $nombreDefault = "";
   $apellidoDefault = "";
   $emailDefault = "";
+  $terminosDefault = "";
+  $sexoDefault = "";
 
-	if ($_POST) {
+if ($_POST) {
 		$arrayDeErrores = verificarInfo($_POST);
 
     	if (count($arrayDeErrores) == 0) {
@@ -13,13 +15,32 @@
 
         	guardarUsuario($usuario);
 
-        	header("Location: main.php");exit;
-    	} else var_dump($arrayDeErrores);
+          $archivo = $_FILES["foto-perfil"]["tmp_name"];
 
-	$nombreDefault = $_POST["nombre"];
-	$apellidoDefault = $_POST["apellido"];
-	$emailDefault = $_POST["email"];
-	}
+          $nombreDeLaFoto = $_FILES["foto-perfil"]["name"];
+          $extension = pathinfo($nombreDeLaFoto, PATHINFO_EXTENSION);
+
+          $nombre = dirname(__FILE__) . "/imgUsers/" . $_POST["email"] . ".$extension";
+
+          move_uploaded_file($archivo, $nombre);
+          loguear($_POST["email"]);
+        	header("Location: main.php");exit;
+      }
+
+      if (isset($arrayDeErrores["nombre"]) == null){  
+      $nombreDefault = ($_POST["nombre"]);
+      }
+      if (isset($arrayDeErrores["apellido"]) == null){  
+      $apellidoDefault = ($_POST["apellido"]);
+      }
+      if (isset($arrayDeErrores["email"]) == null){  
+      $emailDefault = ($_POST["email"]);
+      }
+      if ($_POST["terminos"] != "off") {
+      $terminosDefault = "checked";
+      } 
+}
+
 ?>
 
 
@@ -54,7 +75,7 @@
 			</div>		
 <br>
 <center>
-		<form action="registro.php" class="registro" method="post">
+		<form action="registro.php" class="registro" method="post" enctype="multipart/form-data">
 		<div class="rounded">	
 			<div>
   			Nombre:<br>
@@ -88,12 +109,46 @@
             </span>
           	<?php endif; ?>
   			</div>
+        <br>
+        <div class="form-group">
+          <label for="">Foto de Perfil (Opcional):</label>
+          <br>
+
+          <?php if (isset($arrayErrores["foto-perfil"])) : ?>
+            <input class="form-control error" type="file" name="foto-perfil">
+          <?php else: ?>
+            <input class="form-control" type="file" name="foto-perfil">
+          <?php endif; ?>
+        </div>
   			<br>
   			<div>
-  			Sexo:<br><br>
-  			Masculino<input type="radio" name="sexo" value="">
-  			Femenino<input type="radio" name="sexo" value="">
-  			<br>
+  			Sexo:<br>
+        <input type="hidden" name="sexo" value="off">
+  			Masculino<input type="radio" name="sexo" value="masculino"
+        <?php if ($_POST) {
+          if ($_POST["sexo"] == "masculino") {
+            echo "checked";
+          }
+        }
+        ?>
+        >
+  			Femenino<input type="radio" name="sexo" value="femenino"
+        <?php if ($_POST) {
+          if ($_POST["sexo"] == "femenino") {
+            echo "checked";
+          }
+        }
+        ?>
+        >
+        Otro<input type="radio" name="sexo" value="otro"
+        <?php if ($_POST) {
+          if ($_POST["sexo"] == "otro") {
+            echo "checked";
+          }
+        }
+        ?>
+        >
+        <br>
   			<?php if (isset($arrayDeErrores["sexo"])) : ?>
             <span style="color:red;">
               <?=$arrayDeErrores["sexo"]?>
@@ -125,9 +180,10 @@
   			<br>
   			<div>
   			<h6>Acepta los terminos y condiciones?
-  			<input type="checkbox" name="terminos"></h6>
+        <input type="hidden" name="terminos" value="off">
+  			<input type="checkbox" name="terminos" <?php echo $terminosDefault?>></h6>
   			<?php if (isset($arrayDeErrores["terminos"])) : ?>
-            <span style="color:red;">
+            <span style="color:red; position: relative; bottom: 23px;">
               <?=$arrayDeErrores["terminos"]?>
             </span>
           	<?php endif; ?>

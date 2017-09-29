@@ -1,3 +1,12 @@
+<?php
+	require_once("funciones.php");
+
+	if (yaEstaLogueado()) {
+	$usuario = traerPorEmail($_SESSION["usuarioIniciado"]);
+	$usuario = $usuario["nombre"] . " " . $usuario["apellido"];
+	}
+?>
+
 <html><head>
 		<meta charset="utf-8">
 		<title>Pagina Inicio Cliente</title>
@@ -11,9 +20,20 @@
 				<div style="float: right">
 				<nav class="main.nav">
 						<ul>
+							<?php
+							if (yaEstaLogueado() == false) {
+								?>
 							<li><a href="iniciosesion.php">Iniciar sesión</a></li>
 							<li><a href="registro.php">Regístrese</a></li>
+							<?php
+							} 
+							?>
 							<li><a href="#">Contacto</a></li>
+							<?php if (yaEstaLogueado()) { ?>
+							<li>Usuario <b><?=$usuario?></b></li>
+							<li style="text-decoration: none"><a href="logout.php">Salir</a></li>
+							<?php
+							} ?>
 						</ul>
 				</nav></div>
 			</div>
@@ -29,9 +49,9 @@
 					<p><a href="#">Mujer</a></p>
 					<p><a href="#">Hombre</a></p>
 					<p><a href="#" style="color: white">Sale</a></p>
-					<p><a href="#">Tu carrito<img style="width: 20px; position: relative; left: 5px; top: 4px" src="./images/carrito.svg"></a></p>
-					<u><input type="text" name="busqueda" placeholder="Buscá tu producto..."></u><img style="width: 20px; position: relative; right: 30px; top: 4px" src="./images/busq.png">
-					</ul>
+					<p><u><input type="text" name="busqueda" placeholder="Buscá tu producto..."></u><img style="width: 20px; position: relative; right: 10px; top: 4px" src="./images/busq.png">
+					</p>
+					<p><a href="#">Tu carrito<img style="width: 20px; position: relative; left: 5px; top: 4px" src="./images/carrito.svg"></a></p></ul>
 					</center>
 				</div>
 			</div>		
@@ -42,24 +62,6 @@
 				<section class="products">
 					<article class="estilos">
 						
-						<img src="./images/chi1.jpeg">
-						<h2></h2>
-						<p>
-						</p>
-						<a href="#">Ver mas de este estilo</a>
-						<br><br>
-					</article>
-					<article class="estilos">
-						
-						<img src="./images/boy1.jpeg">
-						<h2></h2>
-						<p>
-						</p>
-						<a href="#">Ver mas de este estilo</a>
-						<br><br>
-					</article>
-					<article class="estilos">
-						
 						<img src="./images/chi2.jpeg">
 						<h2></h2>
 						<p>
@@ -68,7 +70,25 @@
 						<br><br>
 					</article>
 					<article class="estilos">
+						
 						<img src="./images/boy2.jpeg">
+						<h2></h2>
+						<p>
+						</p>
+						<a href="#">Ver mas de este estilo</a>
+						<br><br>
+					</article>
+					<article class="estilos">
+						
+						<img src="./images/chi1.jpeg">
+						<h2></h2>
+						<p>
+						</p>
+						<a href="#">Ver mas de este estilo</a>
+						<br><br>
+					</article>
+					<article class="estilos">
+						<img src="./images/boy1.jpeg">
 						<h2></h2>
 						<p>
 						</p>

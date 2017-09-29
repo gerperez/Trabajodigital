@@ -71,28 +71,27 @@
 <br>
 <center>
 		<form action="iniciosesion.php" class="registro" method="POST">
-		<div class="rounded">	
-  			Mail:<br>
-  			<input type="text" name="email" value="<?=$emailDefault?>"><br>
-  			<?php if (isset($arrayErrores["email"])) : ?>
-            <span style="color:red;">
-              <?=$arrayErrores["email"]?>
+		<div class="rounded">
+		<br>
+		<br>	
+  			<b>Olvido su contraseña?</b> <br><br><br> Ingrese su mail y le enviaremos el metodo de recuperación:<br><br>
+  			<input type="text" name="olvido" style="width: 300px"><br>
+  			<span style="color:red;">
+  			<?php 
+  			if ($_POST) {
+  				if ((traerPorEmail($_POST["olvido"])) == NULL) {
+    			echo "El mail no existe";
+  			}
+  			}
+  			?>
             </span>
-          	<?php endif; ?>
           	<br>
-  			Contraseña:<br>
-  			<input type="password" name="contrasena" value=""><br>
-  			<?php if (isset($arrayErrores["contrasena"])) : ?>
-            <span style="color:red;">
-              <?=$arrayErrores["contrasena"]?>
-            </span>
-          	<?php endif; ?>
-  			<h6>Recordar usuario
-  			<input type="checkbox" name="recordar"></h6>
-  			<h6><a class="olvido" href="olvido.php">Olvido su contraseña?</a></h6>
   		</div>	
-  			<input type="submit" value="Iniciar sesión">
+  			<input type="submit" value="Enviar">
 		</form>
+		<br>
+		<br>
+		<br>
 		<br>
 		<br>
 		<br>

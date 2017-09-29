@@ -1,5 +1,7 @@
 <?php 
 
+session_start();
+
 function verificarInfo($info) {
 
 	$arrayErrores = [];
@@ -9,6 +11,11 @@ function verificarInfo($info) {
 	if ((strlen($_POST["nombre"])) > 15) {
 		$arrayErrores["nombre"] = "Nombre no valido";
 	} 
+
+	$regex = "/[0-9,]/";
+	if (preg_match($regex, ($_POST["nombre"])) != NULL) {
+		$arrayErrores["nombre"] = "El nombre solo puede contener caracteres alfabéticos";
+	}
 
 	elseif ((strlen($_POST["nombre"])) == 0) {
 		$arrayErrores["nombre"] = "Nombre no valido";
@@ -24,19 +31,41 @@ function verificarInfo($info) {
 		$arrayErrores["apellido"] = "Apellido no valido";
 	}
 
+	elseif (ctype_alpha($_POST["apellido"]) == NULL) {
+		$arrayErrores["apellido"] = "El apellido solo puede contener caracteres alfabéticos";
+	}
+
 // MAIL
 
 	if ((strlen($_POST["email"])) == 0) {
-		$arrayErrores["email"] = "Debe espicificar un mail";
+		$arrayErrores["email"] = "Debe especificar un mail";
 	}
 
 	else if (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) == false) {
 		$arrayErrores["email"] = "Mail no valido";
 	}
 
+	else if ((traerPorEmail($_POST["email"])) != NULL) {
+    $arrayErrores["email"] = "El mail ya existe";
+ 	}
+
+
+// FOTO DE PERFIL
+
+  $errorDeLaFoto = $_FILES["foto-perfil"]["error"];
+  $nombreDeLaFoto = $_FILES["foto-perfil"]["name"];
+  $extension = pathinfo($nombreDeLaFoto, PATHINFO_EXTENSION);
+
+  if ($errorDeLaFoto != UPLOAD_ERR_OK) {
+    $arrayDeErrores["foto-perfil"] = "Hubo un error al cargar la foto";
+  }
+  else if ($extension != "jpg" && $extension != "jpeg" && $extension != "png" && $extension != "gif") {
+    $arrayDeErrores["foto-perfil"] = "Lo que subiste no era una imagen";
+  }	
+
 // GENERO
 
-	if (isset($_POST["sexo"]) == 0) {
+	if (($_POST["sexo"]) == "off") {
 		$arrayErrores["sexo"] = "Por favor seleccione un genero";
 	}	
 
@@ -47,12 +76,13 @@ function verificarInfo($info) {
 	} 
 
 	if (($_POST["contrasena"]) != ($_POST["ccontrasena"]) || ($_POST["contrasena"]) == 0) {
-		$arrayErrores["ccontrasena"] = "Contraseña no valida";
+		$arrayErrores["ccontrasena"] = "Confirmacion no valida";
+		$arrayErrores["contrasena"] = "Ingrese devuelta la contraseña";
 	}
 
 // TERMINOS
 
-	if (isset($_POST["terminos"]) == 0) {
+	if (($_POST["terminos"]) == "off") {
 		$arrayErrores["terminos"] = "Debe aceptar los terminos";
 	}
 
@@ -66,8 +96,9 @@ function armarUsuario($info) {
     "nombre" => $info["nombre"],
     "apellido" => $info["apellido"],
     "email" => $info["email"],
-    "password" => $info["contrasena"],
+    "password" => password_hash($info["contrasena"], PASSWORD_DEFAULT),
     "genero" => $info["sexo"]
+
   ];
 }	
 
@@ -96,6 +127,8 @@ function validarInicio($info) {
 
 	$arrayDeErrores = [];
 
+// MAIL
+
 	if (strlen($info["email"]) == 0) {
 		$arrayDeErrores["email"] = "No se introdujo ningún mail";
 	}
@@ -108,10 +141,16 @@ function validarInicio($info) {
 		$arrayDeErrores["email"] = "El usuario no existe";
 	}
 
+// CONTRASEÑA
+
+	if (strlen($info["contrasena"]) == 0) {
+		$arrayDeErrores["contrasena"] = "No introdujo contraseña";
+	}
+
 	else {
 		$usuario = traerPorEmail($info["email"]);
 
-    	if (($info["contrasena"]) != ($usuario["contrasena"])) {
+    	if (password_verify($info["contrasena"], $usuario["password"]) == false) {
       	$arrayDeErrores["contrasena"] = "La contraseña no verifica";
     	}   
     }
@@ -125,6 +164,7 @@ function traerTodosLosUsuarios() {
   $archivo = file_get_contents("usuarios.json");
   $array = explode(PHP_EOL, $archivo);
   array_pop($array);
+
 
   $arrayFinal = [];
   foreach ($array as $usuario) {
@@ -144,6 +184,10 @@ function traerPorEmail($email) {
     }
   }
   return NULL;
+}
+
+function recordarUsuario($email) {
+  setcookie("usuarioLogueado", $email, time() + 60*60*24*7);
 }
 
 ?>
