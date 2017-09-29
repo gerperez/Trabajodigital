@@ -158,7 +158,7 @@ function validarInicio($info) {
 	return $arrayDeErrores;
 }
 
-// no entiendo los dos de abajo
+// ntnd
 
 function traerTodosLosUsuarios() {
   $archivo = file_get_contents("usuarios.json");
