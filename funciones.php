@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 
@@ -10,7 +10,7 @@ function verificarInfo($info) {
 
 	if ((strlen($_POST["nombre"])) > 15) {
 		$arrayErrores["nombre"] = "Nombre no valido";
-	} 
+	}
 
 	$regex = "/[0-9,]/";
 	if (preg_match($regex, ($_POST["nombre"])) != NULL) {
@@ -61,21 +61,23 @@ function verificarInfo($info) {
   }
   else if ($extension != "jpg" && $extension != "jpeg" && $extension != "png" && $extension != "gif") {
     $arrayDeErrores["foto-perfil"] = "Lo que subiste no era una imagen";
-  }	
+  }
 
 // GENERO
 
 	if (($_POST["sexo"]) == "off") {
 		$arrayErrores["sexo"] = "Por favor seleccione un genero";
-	}	
+	}
 
-// CONTRASEÑA (FALTA HASH)
+// CONTRASEÑA 
 
 	if ((strlen($_POST["contrasena"])) > 15 || (strlen($_POST["contrasena"])) < 6) {
 		$arrayErrores["contrasena"] = "Contraseña no valida";
-	} 
+	}
 
-	if (($_POST["contrasena"]) != ($_POST["ccontrasena"]) || ($_POST["contrasena"]) == 0) {
+	if (($_POST["contrasena"]) != ($_POST["ccontrasena"])) {
+
+		//var_dump(($_POST["contrasena"]) == 0);
 		$arrayErrores["ccontrasena"] = "Confirmacion no valida";
 		$arrayErrores["contrasena"] = "Ingrese devuelta la contraseña";
 	}
@@ -100,7 +102,7 @@ function armarUsuario($info) {
     "genero" => $info["sexo"]
 
   ];
-}	
+}
 
 function guardarUsuario($usuario) {
   $usuarioJSON = json_encode($usuario);
@@ -152,7 +154,7 @@ function validarInicio($info) {
 
     	if (password_verify($info["contrasena"], $usuario["password"]) == false) {
       	$arrayDeErrores["contrasena"] = "La contraseña no verifica";
-    	}   
+    	}
     }
 
 	return $arrayDeErrores;
