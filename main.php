@@ -3,7 +3,7 @@
 
 	if (yaEstaLogueado()) {
 	$usuario = traerPorEmail($_SESSION["usuarioIniciado"]);
-	$usuario = $usuario["nombre"] . " " . $usuario["apellido"];
+	$usuario = $usuario["Nombre"] . " " . $usuario["Apellido"];
 	}
 ?>
 

@@ -2,6 +2,16 @@
 
 session_start();
 
+$dsn = 'mysql:host=localhost;dbname=usuarios;charset=utf8mb4;port=3306';
+$user ="root";
+$pass = "root";
+
+try {
+  $db = new PDO($dsn, $user, $pass);
+} catch (Exception $e) {
+  echo "La conexion a la base de datos ha fallado: " . $e->getMessage();
+}
+
 function verificarInfo($info) {
 
 	$arrayErrores = [];
@@ -104,9 +114,26 @@ function armarUsuario($info) {
   ];
 }
 
+
 function guardarUsuario($usuario) {
-  $usuarioJSON = json_encode($usuario);
-  file_put_contents("usuarios.json", $usuarioJSON . PHP_EOL, FILE_APPEND);
+  global $db;
+
+  $sql = "Insert into usuarios values (default,:Nombre,:Apellido,:Email,:Password,:Genero)";
+
+  $query = $db->prepare($sql);
+
+  $query->bindValue(":Nombre",$_POST["nombre"]);
+  $query->bindValue(":Apellido",$_POST["apellido"]);
+  $query->bindValue(":Email",$_POST["email"]);
+  $query->bindValue(":Password",password_hash($_POST["contrasena"], PASSWORD_DEFAULT));
+  $query->bindValue(":Genero",$_POST["sexo"]);
+
+  $query->execute();
+
+  $usuario["Usuario_id"] = $db->lastInsertId();
+
+  return $usuario;
+
 }
 
 // LOGUEO
@@ -150,9 +177,13 @@ function validarInicio($info) {
 	}
 
 	else {
-		$usuario = traerPorEmail($info["email"]);
 
-    	if (password_verify($info["contrasena"], $usuario["password"]) == false) {
+
+		$usuario = traerPorEmail($_POST["email"]);
+
+		$e = (password_verify($_POST["contrasena"], $usuario["Password"]));
+
+    	if (password_verify($_POST["contrasena"], $usuario["Password"]) == false) {
       	$arrayDeErrores["contrasena"] = "La contraseña no verifica";
     	}
     }
@@ -162,30 +193,36 @@ function validarInicio($info) {
 
 // ntnd
 
-function traerTodosLosUsuarios() {
-  $archivo = file_get_contents("usuarios.json");
-  $array = explode(PHP_EOL, $archivo);
-  array_pop($array);
+function traerTodos() {
+  global $db;
 
+  $sql = "Select * from usuarios";
 
-  $arrayFinal = [];
-  foreach ($array as $usuario) {
-    $arrayFinal[] = json_decode($usuario, true);
-  }
+  $query = $db->prepare($sql);
+
+  $query->execute();
+
+  $arrayFinal = $query->fetchAll(PDO::FETCH_ASSOC);
 
   return $arrayFinal;
 }
 
 
 function traerPorEmail($email) {
-  $todos = traerTodosLosUsuarios();
+  global $db;
 
-  foreach ($todos as $usuario) {
-    if ($usuario["email"] == $email) {
-      return $usuario;
-    }
-  }
-  return NULL;
+  $sql = "Select * from usuarios where Email = :Email";
+
+  $query = $db->prepare($sql);
+
+  $query->bindValue(":Email", $email);
+
+  $query->execute();
+
+  $usuario = $query->fetch(PDO::FETCH_ASSOC);
+
+  return $usuario;
+
 }
 
 function recordarUsuario($email) {
