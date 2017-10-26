@@ -78,8 +78,16 @@ class Usuario {
 	}
 
 	public function guardarFoto() {
+		$archivo = $_FILES["foto-perfil"]["tmp_name"];
+
+		$nombreDeLaFoto = $_FILES["foto-perfil"]["name"];
+		$extension = pathinfo($nombreDeLaFoto, PATHINFO_EXTENSION);
+
+		$nombre = dirname(__FILE__) . "/img/" . $this->email . "extension";
+
+		move_uploaded_file($archivo, $nombre);
+	}
 
 }
 
-}
-
+?>

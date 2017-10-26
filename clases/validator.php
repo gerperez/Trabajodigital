@@ -4,8 +4,11 @@ include_once("db.php");
 
 class Validator{
 	public function verificarInfo($info, db $db) {
-
 	$arrayErrores = [];
+
+	foreach ($info as $key => $value) {
+		$info[$key] = trim($value);
+	}
 
 // NOMBRE
 
@@ -89,5 +92,44 @@ class Validator{
 		$arrayErrores["terminos"] = "Debe aceptar los terminos";
 	}
 
-	return ($arrayErrores);
+	return $arrayErrores;
 }
+
+public function validarInicio($info, db $db) {
+
+	$arrayDeErrores = [];
+
+// MAIL
+
+	if (strlen($info["email"]) == 0) {
+		$arrayDeErrores["email"] = "No se introdujo ningún mail";
+	}
+
+	elseif (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) == false) {
+		$arrayDeErrores["email"] = "Se introdujo un mail invalido";
+	}
+
+	elseif ($db->traerPorEmail($info["email"]) == NULL) {
+		$arrayDeErrores["email"] = "El usuario no existe";
+	}
+
+// CONTRASEÑA Revisar chequeo de no contraseña
+
+	$usuario = $db->traerPorEmail($info["email"]);
+		if (strlen($info["contrasena"]) == 0) {
+		$arrayDeErrores["contrasena"] = "No introdujo contraseña";
+	}
+
+	else {
+		$usuario = $db->traerPorEmail($info["email"]);
+    	if (password_verify($info["contrasena"], $usuario->getContraseña()) == false) {
+      	$arrayDeErrores["contrasena"] = "La contraseña no verifica";
+    	}
+    }
+
+	return $arrayDeErrores;
+	}
+}
+
+
+?>
