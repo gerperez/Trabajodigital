@@ -1,7 +1,7 @@
 <?php
-	require_once("funciones.php");
+	require_once("soporte.php");
 
-	if (yaEstaLogueado()) {
+	if ($auth->yaEstaLogueado()) {
 	$usuario = traerPorEmail($_SESSION["usuarioIniciado"]);
 	$usuario = $usuario["Nombre"] . " " . $usuario["Apellido"];
 	}
@@ -21,7 +21,7 @@
 				<nav class="main.nav">
 						<ul>
 							<?php
-							if (yaEstaLogueado() == false) {
+							if ($auth->yaEstaLogueado() == false) {
 								?>
 							<li><a href="iniciosesion.php">Iniciar sesión</a></li>
 							<li><a href="registro.php">Regístrese</a></li>
@@ -29,7 +29,7 @@
 							} 
 							?>
 							<li><a href="#">Contacto</a></li>
-							<?php if (yaEstaLogueado()) { ?>
+							<?php if ($auth->yaEstaLogueado()) { ?>
 							<li>Usuario <b><?=$usuario?></b></li>
 							<li style="text-decoration: none"><a href="logout.php">Salir</a></li>
 							<?php

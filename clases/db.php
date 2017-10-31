@@ -1,6 +1,6 @@
 <?php
 
-include_once("usuario.php");
+include_once("usuarios.php");
 
 abstract class db {
 	public abstract function traerTodos();

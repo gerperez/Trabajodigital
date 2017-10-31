@@ -1,21 +1,27 @@
 <?php
-	require_once("funciones.php");
+	require_once("soporte.php");
 
+if($auth->yaEstaLogueado()) {
+	header("Location:main.php");
+}
+	$arrayDeErrores = [];
   $nombreDefault = "";
   $apellidoDefault = "";
   $emailDefault = "";
   $terminosDefault = "";
   $sexoDefault = "";
 
+
 if ($_POST) {
-		$arrayDeErrores = verificarInfo($_POST);
+		$arrayDeErrores = $validator->verificarInfo($_POST, $db);
 
     	if (count($arrayDeErrores) == 0) {
-        	$usuario = armarUsuario($_POST);
+        	$usuario = new Usuario(null, $_POST["nombre"], $_POST["apellido"], $_POST["email"], $_POST["contrasena"], $_POST["sexo"]);
 
-        	guardarUsuario($usuario);
+        	$usuario = $db->guardarUsuario($usuario);
 
-          $archivo = $_FILES["foto-perfil"]["tmp_name"];
+					$usuario->guardarFoto();
+				  /*$archivo = $_FILES["foto-perfil"]["tmp_name"];
 
           $nombreDeLaFoto = $_FILES["foto-perfil"]["name"];
           $extension = pathinfo($nombreDeLaFoto, PATHINFO_EXTENSION);
@@ -25,21 +31,26 @@ if ($_POST) {
           move_uploaded_file($archivo, $nombre);
           loguear($_POST["email"]);
         	header("Location: main.php");exit;
-      }
+      }*/
 
-      if (isset($arrayDeErrores["nombre"]) == null){  
+			header("Location:main.php");exit;
+		}
+		$emailDefault = $_POST["email"];
+		$usernameDefault = $_POST["nombre"];
+	}
+	    /*if (isset($arrayDeErrores["nombre"]) == null){
       $nombreDefault = ($_POST["nombre"]);
       }
-      if (isset($arrayDeErrores["apellido"]) == null){  
+      if (isset($arrayDeErrores["apellido"]) == null){
       $apellidoDefault = ($_POST["apellido"]);
       }
-      if (isset($arrayDeErrores["email"]) == null){  
+      if (isset($arrayDeErrores["email"]) == null){
       $emailDefault = ($_POST["email"]);
       }
       if ($_POST["terminos"] != "off") {
       $terminosDefault = "checked";
-      } 
-}
+      }
+}*/
 
 ?>
 
@@ -53,7 +64,7 @@ if ($_POST) {
 		<meta name="viewport" content="initial-scale=1">
 	</head>
 	<body>
-			<div class="opciones">	
+			<div class="opciones">
 				<div style="float: left; margin-left: 18px; margin-top: 16px" >
 				<a href="#">Servicio al consumidor</a></div>
 				<div style="float: right">
@@ -72,11 +83,11 @@ if ($_POST) {
 					<center>
 						<img src="./images/titulo.png"></center>
 				</header>
-			</div>		
+			</div>
 <br>
 <center>
 		<form action="registro.php" class="registro" method="post" enctype="multipart/form-data">
-		<div class="rounded">	
+		<div class="rounded">
 			<div>
   			Nombre:<br>
   			<input type="text" name="nombre" value="<?=$nombreDefault?>">
@@ -188,7 +199,7 @@ if ($_POST) {
             </span>
           	<?php endif; ?>
   			</div>
-  		</div>	
+  		</div>
   			<input type="submit" value="Crear cuenta">
 		</form>
 				<footer class= "main-footer">

@@ -1,10 +1,10 @@
 <?php
-	require_once("funciones.php");
+	require_once("soporte.php");
 
 	$emailDefault = "";
 
-	if (yaEstaLogueado()) {
-		header("Location: main.php");
+	if ($auth->yaEstaLogueado()) {
+		header("Location:main.php");
 	} 
 
 	//validar
@@ -12,10 +12,10 @@
 	//si ta todo ok set session
 
 	//redirigir a home
+	$arrayErrores= [];
 
 	if ($_POST) {
-
-  	$arrayErrores = validarInicio($_POST);
+  	$arrayErrores = $validator->validarInicio($_POST, $db);
 
   	if (isset($_POST["email"]) != 0 && isset($arrayErrores["email"]) == 0) {
   		$emailDefault = $_POST["email"];
@@ -50,7 +50,7 @@
 						<ul>
 							<li><a href="main.php">Home</a></li>
 							<?php
-							if (yaEstaLogueado() == false) {
+							if ($auth->yaEstaLogueado() == false) {
 								?>
 							<li><a href="iniciosesion.php">Iniciar sesión</a></li>
 							<?php

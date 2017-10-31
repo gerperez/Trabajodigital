@@ -2,7 +2,7 @@
 
 include_once("db.php");
 
-class Validator{
+class Validator {
 	public function verificarInfo($info, db $db) {
 	$arrayErrores = [];
 
@@ -49,7 +49,7 @@ class Validator{
 		$arrayErrores["email"] = "Mail no valido";
 	}
 
-	else if (($db->traerPorEmail($info["email"])) != NULL) {
+	else if (($db->traerPorEmail($info["email"])) != false) {
     $arrayErrores["email"] = "El mail ya existe";
  	}
 
@@ -73,7 +73,7 @@ class Validator{
 		$arrayErrores["sexo"] = "Por favor seleccione un genero";
 	}
 
-// CONTRASEÑA 
+// CONTRASEÑA
 
 	if ((strlen($info["contrasena"])) > 15 || (strlen($info["contrasena"])) < 6) {
 		$arrayErrores["contrasena"] = "Contraseña no valida";
@@ -105,31 +105,22 @@ public function validarInicio($info, db $db) {
 		$arrayDeErrores["email"] = "No se introdujo ningún mail";
 	}
 
-	elseif (filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) == false) {
+	elseif (filter_var($info["email"], FILTER_VALIDATE_EMAIL) == false) {
 		$arrayDeErrores["email"] = "Se introdujo un mail invalido";
 	}
 
 	elseif ($db->traerPorEmail($info["email"]) == NULL) {
 		$arrayDeErrores["email"] = "El usuario no existe";
-	}
-
-// CONTRASEÑA Revisar chequeo de no contraseña
-
-	$usuario = $db->traerPorEmail($info["email"]);
-		if (strlen($info["contrasena"]) == 0) {
-		$arrayDeErrores["contrasena"] = "No introdujo contraseña";
-	}
-
-	else {
-		$usuario = $db->traerPorEmail($info["email"]);
-    	if (password_verify($info["contrasena"], $usuario->getContraseña()) == false) {
-      	$arrayDeErrores["contrasena"] = "La contraseña no verifica";
-    	}
-    }
-
+		}else { 
+				$usuario = $db->traerPorEmail($info["email"]);
+    				if (password_verify($info["contrasena"], $usuario->getPassword()) == false) {
+      		$arrayDeErrores["contrasena"] = "La contraseña no verifica";
+    		}
+   		 }
 	return $arrayDeErrores;
 	}
 }
+
 
 
 ?>

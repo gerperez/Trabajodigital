@@ -6,7 +6,7 @@ class Auth {
 		session_start();
 
 		if(!$this->yaEstaLogueado() && isset($_COOKIE["usuarioIniciado"])) {
-			this->loguear($_COOKIE["usuarioIniciado"]);
+			$this->loguear($_COOKIE["usuarioIniciado"]);
 		}
 	}
 

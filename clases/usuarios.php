@@ -8,7 +8,7 @@ class Usuario {
 	private $password;
 	private $genero;
 
-	public function __contruct($usuario_id = null, $nombre, $apellido, $email, $password, $genero) {
+	public function __construct($usuario_id = null, $nombre, $apellido, $email, $password, $genero) {
 
 		if($usuario_id==null){
 			$this->password = password_hash($password, PASSWORD_DEFAULT);
@@ -87,6 +87,10 @@ class Usuario {
 
 		move_uploaded_file($archivo, $nombre);
 	}
+
+	public function setId($id) {
+	     $this->id = $id;
+    }
 
 }
 
